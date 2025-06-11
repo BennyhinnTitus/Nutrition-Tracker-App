@@ -1,11 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome | Sign Up or Log In</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nutrition Tracker - Sign In</title>
+  
+
+  <!-- Load Google Sign-In JavaScript library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+  </style>
 </head>
 <body>
-    
+
+  <h1>Welcome to Nutrition Tracker</h1>
+  <p>Sign in with your Google account to continue</p>
+
+  <!-- Google Sign-In Setup -->
+  <div id="g_id_onload"
+       data-client_id="975434971574-cgdecjfqmgfeutdrqenk14bqgotibreb.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
+  </div>
+
+  <!-- Google Sign-In Button -->
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="signin_with"
+       data-shape="rectangular"
+       data-logo_alignment="left">
+  </div>
+
+  <script>
+    function handleCredentialResponse(response) {
+      // Step 1: Decode the token to get user info
+      const token = response.credential;
+      const user = JSON.parse(atob(token.split('.')[1]));
+
+      const email = user.email;
+      const name = user.name;
+
+      // Step 2: Save user data in localStorage (for now, acting like a database)
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userName", name);
+
+      // Step 3: Decide whether it's a new user or returning user
+      const isNewUser = !localStorage.getItem(email);
+
+      if (isNewUser) {
+        // New user → go to userdata.html
+        window.location.href = "userdata.html";
+      } else {
+        // Returning user → go to home page
+        window.location.href = "index.html";
+      }
+    }
+  </script>
 </body>
 </html>
