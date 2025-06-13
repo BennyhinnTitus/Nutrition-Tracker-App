@@ -47,10 +47,12 @@
 
       const email = user.email;
       const name = user.name;
+      const sub = user.sub;
 
       // Step 2: Save user data in localStorage (for now, acting like a database)
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userName", name);
+      localStorage.setItem("userSub", sub);
 
       // Step 3: Decide whether it's a new user or returning user
       const isNewUser = !localStorage.getItem(email);
