@@ -1,11 +1,16 @@
-const express = require('express');
+import express from 'express';
+import dotenv from 'dotenv';
+import authRoutes from './auth.js';
+
+dotenv.config();
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(authRoutes)
 
 app.get('/', (req, res) => {
-  res.send('Hello Backend!');
+  res.send('Hello from Backend!');
 });
 
 app.listen(PORT, () => {

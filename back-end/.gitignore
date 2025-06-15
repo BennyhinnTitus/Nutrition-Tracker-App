@@ -1,0 +1,28 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Dependency lock files (optional: keep if team agrees)
+package-lock.json
+
+# Build output (if any)
+dist/
+build/
+
+# Cache
+.cache/
