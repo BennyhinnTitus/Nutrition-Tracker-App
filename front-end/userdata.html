@@ -57,7 +57,7 @@
     <label for="age">Age</label>
     <input type="number" id="age" placeholder="Your age" />
 
-    <button type="submit">Submit</button>
+    <button type="submit">Save My Info</button>
   </form>
 <script>
   document.getElementById('userDataForm').addEventListener('submit', async (e) => {
@@ -84,7 +84,7 @@
       alert(result.message);
 
       window.location.href = "targetdata.html";
-    } 
+    }
     catch (error) {
       console.error('Error submitting user data:', error);
       alert('Something went wrong. Please try again.');

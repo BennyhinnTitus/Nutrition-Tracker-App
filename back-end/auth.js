@@ -1,4 +1,3 @@
-// auth.js
 import express from 'express';
 import { OAuth2Client } from 'google-auth-library';
 
