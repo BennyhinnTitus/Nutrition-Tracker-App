@@ -40,29 +40,40 @@
   </div>
 
   <script>
-    function handleCredentialResponse(response) {
-      // Step 1: Decode the token to get user info
+    async function handleCredentialResponse(response) {
       const token = response.credential;
-      const user = JSON.parse(atob(token.split('.')[1]));
 
-      const email = user.email;
-      const name = user.name;
-      const sub = user.sub;
+      try {
+        const res = await fetch("http://localhost:3000/api/auth/google", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ credential: token })
+        });
 
-      // Step 2: Save user data in localStorage (for now, acting like a database)
-      localStorage.setItem("userEmail", email);
-      localStorage.setItem("userName", name);
-      localStorage.setItem("userSub", sub);
+        const data = await res.json();
 
-      // Step 3: Decide whether it's a new user or returning user
-      const isNewUser = !localStorage.getItem(email);
+        if (data.success) {
+          const email = data.user.email;
 
-      if (isNewUser) {
-        // New user → go to userdata.html
-        window.location.href = "userdata.html";
-      } else {
-        // Returning user → go to home page
-        window.location.href = "index.html";
+          localStorage.setItem("userEmail", email);
+
+          // TEMPORARY check — replace with backend user check later
+          const isNewUser = !localStorage.getItem(email);
+
+          if (isNewUser) {
+            window.location.href = "userdata.html";
+          } else {
+            window.location.href = "index.html";
+          }
+        } 
+        else {
+          alert("Google token verification failed.");
+        }
+      } catch (err) {
+        console.error("Auth error:", err);
+        alert("Login failed due to a server error.");
       }
     }
   </script>
