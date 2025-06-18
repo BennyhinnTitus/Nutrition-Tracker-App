@@ -40,25 +40,32 @@
   </div>
 
   <script>
-    function handleCredentialResponse(response) {
-      // Step 1: Decode the token to get user info
-      const token = response.credential;
-      const user = JSON.parse(atob(token.split('.')[1]));
+      async function handleCredentialResponse(response) {
+        const token = response.credential;
 
-      const email = user.email;
-      const name = user.name;
-      const sub = user.sub;
+        try {
+          const res = await fetch("http://localhost:3000/api/auth/google", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ credential: token })
+          });
 
-      localStorage.setItem("userEmail", email);
+          const data = await res.json();
 
-      const isNewUser = !localStorage.getItem(email);
+          if (data.success) {
+            const email = data.user.email;
+            localStorage.setItem("userEmail", email);
 
-      if (isNewUser) {
-        window.location.href = "userdata.html";
-      } else {
-        window.location.href = "index.html";
+            const isNewUser = !localStorage.getItem(email);
+            window.location.href = isNewUser ? "userdata.html" : "index.html";
+          } else {
+            alert("Google token verification failed.");
+          }
+        } catch (err) {
+          console.error("Auth error:", err);
+          alert("Login failed due to a server error.");
+        }
       }
-    }
   </script>
 </body>
 </html>

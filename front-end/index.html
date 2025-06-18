@@ -89,6 +89,9 @@
     const email = localStorage.getItem("userEmail");
     console.log("Email used in fetch:", email);
 
+    let userData = null; 
+    let dailyData = null;
+
     fetch(`http://localhost:3000/user-index/${email}`)
     .then(res => res.json())
     .then(data => {
@@ -101,6 +104,14 @@
         <p><strong>Height:</strong> ${userData.height} cm</p>
         <p><strong>Age:</strong> ${userData.age}</p>
       `;
+
+          let dailyData = {
+          currentWeight: userData.weight,
+          calorieIntake: 0,
+          calorieBurn: 0,
+          waterIntake: 0
+        };
+
       }
       else {
         userBox.innerHTML = "User data not found!";
@@ -110,13 +121,6 @@
       console.error(err);
       userBox.innerHTML = "Error fetching user data!";
     })
-
-    let dailyData = {
-      currentWeight: userData.weight,
-      calorieIntake: 0,
-      calorieBurn: 0,
-      waterIntake: 0
-    };
 
     function pushProgress() {
       const water = document.getElementById("water").value;

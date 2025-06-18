@@ -11,10 +11,10 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use(authRoutes);
-app.use(userRoutes);
-app.use(targetRoutes);
-app.use(indexRoutes);
+app.use('/api', authRoutes);
+app.use('/api',userRoutes);
+app.use('/api',targetRoutes);
+app.use('/api',indexRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello from Backend!');

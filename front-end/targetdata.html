@@ -74,6 +74,7 @@
       }
 
       try {
+        data.email = localStorage.getItem("userEmail");
         const res = await fetch('/user-target', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
