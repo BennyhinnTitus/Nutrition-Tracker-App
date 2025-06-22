@@ -65,18 +65,18 @@
     <form id="dailyStatForm">
 
       <label for="water">Water Drank (ml)</label>
-      <input type="number" id="water" placeholder="e.g., 300" />
+      <input type="number" name="water" placeholder="e.g., 300" />
 
       <label for="intake">Calorie Intaken (cal)</label>
-      <input type="number" id="intake" placeholder="e.g., 600" />
+      <input type="number" name="intake" placeholder="e.g., 600" />
 
       <label for="burn">Calorie Burned (cal)</label>
-      <input type="number" id="burn" placeholder="e.g., 400" />
+      <input type="number" name="burn" placeholder="e.g., 400" />
 
       <label for="weight">Current Weight</label>
-      <input type="number" id="weight" placeholder="e.g., 70" />
+      <input type="number" name="weight" placeholder="e.g., 70" />
 
-      <button onclick="pushProgress()">Save My Progress</button>
+      <button type="submit">Save My Progress</button>
     </form>
 
   </div>
@@ -87,13 +87,25 @@
   <script defer>
     const userBox = document.getElementById("userDetailsBox");
     const email = localStorage.getItem("userEmail");
+    async function fetchUserData() {
     console.log("Email used in fetch:", email);
 
-    fetch(`http://localhost:3000/user-index/${email}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        const userData = data.body;
+      if (!email) {
+        userBox.innerHTML = "No user email found in localStorage!";
+        return;
+      }
+    try {
+      const res = await fetch(`http://localhost:3000/api/user/user-index/${email}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const result = await res.json();
+   
+      if (result.success) {
+        const userData = result.data;
         userBox.innerHTML = `
         <p><strong>Name:</strong> ${userData.name}</p>
         <p><strong>Email:</strong> ${userData.email}</p>
@@ -105,19 +117,70 @@
       else {
         userBox.innerHTML = "User data not found!";
       }
-    })
-    .catch(err => {
+    }
+    
+    catch (err) {
       console.error(err);
       userBox.innerHTML = "Error fetching user data!";
-    })
+    }
+  }
+  fetchUserData();
 
-    let dailyData = {
-      currentWeight: userData.weight,
-      calorieIntake: 0,
-      calorieBurn: 0,
-      waterIntake: 0
-    };
+    // let dailyData = {
+    //   currentWeight: userData.weight,
+    //   calorieIntake: 0,
+    //   calorieBurn: 0,
+    //   waterIntake: 0
+    // };
 
+document.getElementById('dailyStatForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); 
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    console.log('🚀 Submitted Form Data:');
+    for (const [key, value] of Object.entries(data)) {
+      console.log(`${key}: ${value}`);
+      if (!value.trim()) {
+        alert(`Please fill in the ${key} field.`);
+        return;
+      }
+    }
+
+    try {
+          const res = await fetch('http://localhost:3000/api/progress/daily-progress', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        // email: localStorage.getItem("userEmail"),
+        water: data.water,
+        intake: data.intake,
+        burn: data.burn,
+        weight: data.weight
+      }),
+    });
+
+      const result = await res.json();
+      console.log('🚀 Response from server:', result);
+
+      if (result.success) {
+        alert('Your progress has been successfully submitted!');
+      } else {
+        alert('Failed to submit your progress. Please try again.');
+      }
+
+    }
+
+    catch (err) {
+      console.error('Error submitting form:', err);
+      alert('Failed to submit your progress. Please try again later.');
+      return;
+    }
+
+});
     function pushProgress() {
       const water = document.getElementById("water").value;
       const intake = document.getElementById("intake").value;

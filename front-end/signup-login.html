@@ -42,6 +42,7 @@
   <script>
       async function handleCredentialResponse(response) {
         const token = response.credential;
+        console.log("Encoded JWT ID token: " + token);
 
         try {
           const res = await fetch("http://localhost:3000/api/auth/google", {

@@ -4,8 +4,9 @@ import { OAuth2Client } from 'google-auth-library';
 const router = express.Router();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-router.post('/auth/google', async (req, res) => {
+router.post('/google', async (req, res) => {
   const { credential } = req.body;
+  console.log(req.body);
 
   try {
     const ticket = await client.verifyIdToken({
