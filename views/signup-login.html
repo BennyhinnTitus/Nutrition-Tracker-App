@@ -4,17 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nutrition Tracker - Sign In</title>
+  <link rel="stylesheet" href="/css/style.css" />
   
 
   <!-- Load Google Sign-In JavaScript library -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 100px;
-    }
+
   </style>
 </head>
 <body>
@@ -39,32 +36,8 @@
        data-logo_alignment="left">
   </div>
 
-  <script>
-    function handleCredentialResponse(response) {
-      // Step 1: Decode the token to get user info
-      const token = response.credential;
-      const user = JSON.parse(atob(token.split('.')[1]));
-
-      const email = user.email;
-      const name = user.name;
-      const sub = user.sub;
-
-      // Step 2: Save user data in localStorage (for now, acting like a database)
-      localStorage.setItem("userEmail", email);
-      localStorage.setItem("userName", name);
-      localStorage.setItem("userSub", sub);
-
-      // Step 3: Decide whether it's a new user or returning user
-      const isNewUser = !localStorage.getItem(email);
-
-      if (isNewUser) {
-        // New user → go to userdata.html
-        window.location.href = "userdata.html";
-      } else {
-        // Returning user → go to home page
-        window.location.href = "index.html";
-      }
-    }
+  <script src="/js/script.js">
+    
   </script>
 </body>
 </html>

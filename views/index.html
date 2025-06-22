@@ -4,54 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Dashboard | Nutrition Progress</title>
+  <link rel="stylesheet" href="/css/style.css" />
   <style>
-    h1 {
-      text-align: center;
-      padding-top: 20px;
-      padding-bottom: 10px;
-    }
-    h2 {
-      margin: 0px;
-      padding-left: 80px;
-    }
-    .user {
-      display: inline-block;
-      margin: 15px;
-      padding: 20px;
-      border: 1px solid;
-      border-radius: 10px;
-      font-family: Arial, sans-serif;
-    }
-    .user p {
-      margin: 10px 0;
-    }
-    label {
-      display: block;
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      border-radius: 6px;
-    }
-        input {
-      width: 95%;
-      padding: 8px;
-      margin-top: 4px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      margin-top: 25px;
-      padding: 10px;
-      width: 100%;
-      background-color: teal;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: darkcyan;
-    }
+    
   </style>
 </head>
 <body>
@@ -61,7 +16,7 @@
 
   <h2><strong>Update My Stats</strong></h2>
   <div class="user" id="updateProgressBox">
-
+<button onclick=func()>click</button>
     <form id="dailyStatForm">
 
       <label for="water">Water Drank (ml)</label>
@@ -84,171 +39,8 @@
   <h2><strong>Today's Progress</strong></h2>
   <div class="user" id="showProgressBox"></div>
 
-  <script defer>
-    const userBox = document.getElementById("userDetailsBox");
-    const email = localStorage.getItem("userEmail");
-    async function fetchUserData() {
-    console.log("Email used in fetch:", email);
-
-      if (!email) {
-        userBox.innerHTML = "No user email found in localStorage!";
-        return;
-      }
-    try {
-      const res = await fetch(`http://localhost:3000/api/user/user-index/${email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const result = await res.json();
+  <script src="/js/script.js" defer>
    
-      if (result.success) {
-        const userData = result.data;
-        userBox.innerHTML = `
-        <p><strong>Name:</strong> ${userData.name}</p>
-        <p><strong>Email:</strong> ${userData.email}</p>
-        <p><strong>Weight:</strong> ${userData.weight} kg</p>
-        <p><strong>Height:</strong> ${userData.height} cm</p>
-        <p><strong>Age:</strong> ${userData.age}</p>
-      `;
-      }
-      else {
-        userBox.innerHTML = "User data not found!";
-      }
-    }
-    
-    catch (err) {
-      console.error(err);
-      userBox.innerHTML = "Error fetching user data!";
-    }
-  }
-  fetchUserData();
-
-    // let dailyData = {
-    //   currentWeight: userData.weight,
-    //   calorieIntake: 0,
-    //   calorieBurn: 0,
-    //   waterIntake: 0
-    // };
-
-document.getElementById('dailyStatForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); 
-
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-
-    console.log('🚀 Submitted Form Data:');
-    for (const [key, value] of Object.entries(data)) {
-      console.log(`${key}: ${value}`);
-      if (!value.trim()) {
-        alert(`Please fill in the ${key} field.`);
-        return;
-      }
-    }
-
-    try {
-          const res = await fetch('http://localhost:3000/api/progress/daily-progress', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        // email: localStorage.getItem("userEmail"),
-        water: data.water,
-        intake: data.intake,
-        burn: data.burn,
-        weight: data.weight
-      }),
-    });
-
-      const result = await res.json();
-      console.log('🚀 Response from server:', result);
-
-      if (result.success) {
-        alert('Your progress has been successfully submitted!');
-      } else {
-        alert('Failed to submit your progress. Please try again.');
-      }
-
-    }
-
-    catch (err) {
-      console.error('Error submitting form:', err);
-      alert('Failed to submit your progress. Please try again later.');
-      return;
-    }
-
-});
-    function pushProgress() {
-      const water = document.getElementById("water").value;
-      const intake = document.getElementById("intake").value;
-      const burn = document.getElementById("burn").value;
-      const weight = document.getElementById("weight").value;
-
-      if (!water && !intake && !burn && !weight) {
-        alert("You did nothing...");
-        return;
-      }
-
-      if (water) {
-        dailyData.waterIntake += parseInt(water);
-      }
-
-      if (intake) {
-        dailyData.calorieIntake += parseInt(intake);
-      }
-
-      if (burn) {
-        dailyData.calorieBurn += parseInt(burn);
-      }
-
-      if (weight) {
-        dailyData.currentWeight = parseFloat(weight);
-      }
-      updateProgress();
-    }
-
-    const targetData = JSON.parse(localStorage.getItem("targetData"));
-    
-    const showProgessBox = document.getElementById("showProgressBox");
-    showProgessBox.innerHTML = `
-    <h4>1. Water Goal (${dailyData.waterIntake} / ${targetData.water})</h4>
-    <p>Achieved ${Math.round((dailyData.waterIntake / targetData.water) * 100)}%</p>
-    <h4>2. Calorie Burns (${dailyData.calorieBurn} / ${targetData.burn})</h4>
-    <p>Achieved ${Math.round((dailyData.calorieBurn / targetData.burn) * 100)}%</p>
-    <h4>3. Calorie Intakes (${dailyData.calorieIntake} / ${targetData.intake})</h4>
-    <p>Reached ${Math.round((dailyData.calorieIntake / targetData.intake) * 100)}%</p>
-    <h4>4. Weight Loss (${dailyData.currentWeight} / ${userData.weight - targetData.target_weight})</h4>
-    <p>Progressed ${Math.round((dailyData.currentWeight / targetData.target_weight) * 100)}%</p>
-    `;
-
-    function updateProgress() {
-  const initialWeight = userData.weight;
-  const targetWeight = targetData.target_weight;
-  const weightGoal = initialWeight - targetWeight;
-
-  let weightLost = 0;
-  let weightProgress = 0;
-
-  weightLost = initialWeight - dailyData.currentWeight;
-  weightProgress = Math.round((weightLost / weightGoal) * 100);
-
-  showProgessBox.innerHTML = `
-    <h4>1. Water Goal (${dailyData.waterIntake} / ${targetData.water})</h4>
-    <p>Achieved ${Math.round((dailyData.waterIntake / targetData.water) * 100)}%</p>
-
-    <h4>2. Calorie Burns (${dailyData.calorieBurn} / ${targetData.burn})</h4>
-    <p>Achieved ${Math.round((dailyData.calorieBurn / targetData.burn) * 100)}%</p>
-    
-    <h4>3. Calorie Intakes (${dailyData.calorieIntake} / ${targetData.intake})</h4>
-    <p>Reached ${Math.round((dailyData.calorieIntake / targetData.intake) * 100)}%</p>
-
-    <h4>4. Weight Loss (${weightLost} / ${weightGoal} kg)</h4>
-    <p>Progressed ${weightProgress}%</p>
-  `;
-}
   </script>
 </body>
 </html>

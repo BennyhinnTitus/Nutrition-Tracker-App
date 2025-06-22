@@ -4,39 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Target Data</title>
+  <link rel="stylesheet" href="/css/style.css" />
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 400px;
-      margin: 40px auto;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      margin-top: 25px;
-      padding: 10px;
-      width: 105%;
-      background-color: teal;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: darkcyan;
-    }
-    h2 {
-        padding-top: 40px;
-    }
+
   </style>
 </head>
 <body>
@@ -59,38 +30,8 @@
     <button type="submit">Save My Goals</button>
   </form>
 
-  <script>
-    document.getElementById('targetDataForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
-
-      for (const [key, value] of Object.entries(data)) {
-        if (!value.trim()) {
-          alert(`Please fill in the ${key} field`);
-          return;
-        }
-      }
-
-      try {
-        const res = await fetch('/user-target', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-
-        const result = await res.json();
-        alert(result.message);
-
-        window.location.href = 'index.html';
-      }
-
-      catch (error) {
-        console.error('Error submitting you data: ', error);
-        alert("Oops! Something went wrong, please try again later.");
-      }
-    });
+  <script src="/js/script.js">
+    
   </script>
 </body>
 </html>

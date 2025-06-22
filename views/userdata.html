@@ -4,43 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>User Data</title>
+  <link rel="stylesheet" href="/css/style.css" />
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 400px;
-      margin: 40px auto;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      margin-top: 25px;
-      padding: 10px;
-      width: 105%;
-      background-color: teal;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: darkcyan;
-    }
-    h2 {
-        padding-top: 40px;
-    }
+    
   </style>
 </head>
 <body>
   <h2>Enter Your Details</h2>
+  <button onclick=func()>click</button>
   <form id="userDataForm">
     <label for="name">Name</label>
     <input type="text" name="name" placeholder="Enter your name" />
@@ -59,39 +31,8 @@
 
     <button type="submit">Save My Info</button>
   </form>
-<script>
-  document.getElementById('userDataForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); 
 
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-
-    console.log('🚀 Submitted Form Data:');
-    for (const [key, value] of Object.entries(data)) {
-      console.log(`${key}: ${value}`);
-      if (!value.trim()) {
-        alert(`Please fill in the ${key} field.`);
-        return;
-      }
-    }
-
-    try {
-      const res = await fetch('http://localhost:3000/api/user/user-fitness-data', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      const result = await res.json();
-      alert(result.message);
-
-      window.location.href = "targetdata.html";
-    }
-    catch (error) {
-      console.error('Error submitting user data:', error);
-      alert('Something went wrong. Please try again.');
-    }
-  });
+<script src="/js/script.js">
   
 </script>
 
