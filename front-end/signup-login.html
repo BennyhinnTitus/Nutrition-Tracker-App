@@ -24,7 +24,7 @@
 
   <!-- Google Sign-In Setup -->
   <div id="g_id_onload"
-       data-client_id="975434971574-cgdecjfqmgfeutdrqenk14bqgotibreb.apps.googleusercontent.com"
+       data-client_id=""
        data-callback="handleCredentialResponse"
        data-auto_prompt="false">
   </div>
@@ -40,31 +40,33 @@
   </div>
 
   <script>
-    function handleCredentialResponse(response) {
-      // Step 1: Decode the token to get user info
-      const token = response.credential;
-      const user = JSON.parse(atob(token.split('.')[1]));
+      async function handleCredentialResponse(response) {
+        const token = response.credential;
+        console.log("Encoded JWT ID token: " + token);
 
-      const email = user.email;
-      const name = user.name;
-      const sub = user.sub;
+        try {
+          const res = await fetch("http://localhost:3000/api/auth/google", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ credential: token })
+          });
 
-      // Step 2: Save user data in localStorage (for now, acting like a database)
-      localStorage.setItem("userEmail", email);
-      localStorage.setItem("userName", name);
-      localStorage.setItem("userSub", sub);
+          const data = await res.json();
 
-      // Step 3: Decide whether it's a new user or returning user
-      const isNewUser = !localStorage.getItem(email);
+          if (data.success) {
+            const email = data.user.email;
+            localStorage.setItem("userEmail", email);
 
-      if (isNewUser) {
-        // New user → go to userdata.html
-        window.location.href = "userdata.html";
-      } else {
-        // Returning user → go to home page
-        window.location.href = "index.html";
+            const isNewUser = !localStorage.getItem(email);
+            window.location.href = isNewUser ? "userdata.html" : "index.html";
+          } else {
+            alert("Google token verification failed.");
+          }
+        } catch (err) {
+          console.error("Auth error:", err);
+          alert("Login failed due to a server error.");
+        }
       }
-    }
   </script>
 </body>
 </html>
