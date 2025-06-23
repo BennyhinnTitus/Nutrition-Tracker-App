@@ -1,6 +1,8 @@
-// import mysql from 'mysql2/promise';
+import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 dotenv.config();
+
+console.log(process.env.DB_HOST, process.env.DB_USER, process.env.DB_PASS, process.env.DB_NAME);
 
 const db = await mysql.createPool({
   host: process.env.DB_HOST,
@@ -8,5 +10,7 @@ const db = await mysql.createPool({
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
 });
+
+// console.log(db);
 
 export default db;

@@ -6,10 +6,11 @@ import progresssRoutes from './routes/progress.js';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import db from './models/db.js';
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 300;
 const HOSTNAME = process.env.HOSTNAME || 'localhost';
 
 // 🔧 Fix __dirname in ES modules
@@ -43,6 +44,16 @@ app.get('/targetdata', (req, res) => {
 
 app.get('/userdata', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'userdata.html'));
+});
+
+app.get('/test-db', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT 1 + 1 AS result');
+    res.json({ success: true, result: rows[0].result });
+  } catch (err) {
+    console.error('Database connection failed:', err);
+    res.status(500).json({ success: false, error: 'DB connection error' });
+  }
 });
 
 // 🚀 Start server
