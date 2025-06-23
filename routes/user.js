@@ -4,8 +4,8 @@ const router = express.Router();
 // import db from '../db.js';   
 
 router.post('/user-target', async (req, res) => {
-    const { water_intake, body_weight, calorie_intake, calorie_burn } = req.body;
-    console.log(req.body);
+    // const { water_intake, body_weight, calorie_intake, calorie_burn } = req.body;
+    // console.log(req.body);
     // const [rows] = await db.execute('SELECT id FROM userdata WHERE email = ?', [email]);
     
     // if (rows.length === 0) {
@@ -16,7 +16,8 @@ router.post('/user-target', async (req, res) => {
     // const query = 'INSERT INTO targetdata (userdata_id, water, weight, cal_intake, cal_burn) VALUES (?, ?, ?, ?, ?)';
 
     try {
-        console.log('Received user target data:', { water_intake, body_weight, calorie_intake, calorie_burn });
+        // console.log('🚀 Target Data Received:', req.body);
+        // console.log('Received user target data:', { water_intake, body_weight, calorie_intake, calorie_burn });
         // await db.execute(query, [user_id, water_intake, body_intake, calorie_intake, calorie_burn]);
         res.status(201).json( {success: true, message: 'User data saved!', received_data: req.body} );
     }
@@ -29,7 +30,7 @@ router.post('/user-target', async (req, res) => {
 
 router.post('/user-fitness-data', async (req, res) => {
   const { name, email, height, weight, age } = req.body;
-//   const query = `INSERT INTO userdata (name, email, height, weight, age) VALUES (?, ?, ?, ?, ?)`;
+  const query = `INSERT INTO userdata (name, email, height, weight, age) VALUES (?, ?, ?, ?, ?)`;
 
   try {
     console.log('Received user data:', { name, email, height, weight, age });

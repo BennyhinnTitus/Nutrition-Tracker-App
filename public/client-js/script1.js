@@ -2,6 +2,7 @@
 
  const userBox = document.getElementById("userDetailsBox");
     const email = localStorage.getItem("userEmail");
+
     async function fetchUserData() {
     console.log("Email used in fetch:", email);
 
@@ -10,7 +11,7 @@
         return;
       }
     try {
-      const res = await fetch(`http://localhost:3000/api/user/user-index/${email}`, {
+      const res = await fetch(` /api/user/user-index/${email}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ document.getElementById('dailyStatForm').addEventListener('submit', async (e) =>
     }
 
     try {
-          const res = await fetch('http://localhost:3000/api/progress/daily-progress', {
+          const res = await fetch('/api/progress/daily-progress', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -238,34 +239,58 @@ document.getElementById('targetDataForm').addEventListener('submit', async (e) =
 
     // signup-login.html
 
-      async function handleCredentialResponse(response) {
-        const token = response.credential;
-        console.log("Encoded JWT ID token: " + token);
+      // async function handleCredentialResponse(response) {
+      //   const token = response.credential;
+      //   console.log("Encoded JWT ID token: " + token);
 
-        try {
-          const res = await fetch("http://localhost:3000/api/auth/google", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ credential: token })
-          });
+      //   try {
+      //     const res = await fetch("http://localhost:3000/api/auth/google", {
+      //       method: "POST",
+      //       headers: { "Content-Type": "application/json" },
+      //       body: JSON.stringify({ credential: token })
+      //     });
 
-          const data = await res.json();
+      //     const data = await res.json();
 
-          if (data.success) {
-            const email = data.user.email;
-            localStorage.setItem("userEmail", email);
+      //     if (data.success) {
+      //       const email = data.user.email;
+      //       localStorage.setItem("userEmail", email);
 
-            const isNewUser = !localStorage.getItem(email);
-            window.location.href = isNewUser ? "userdata.html" : "index.html";
-          } else {
-            alert("Google token verification failed.");
-          }
-        } catch (err) {
-          console.error("Auth error:", err);
-          alert("Login failed due to a server error.");
-        }
-      }
+      //       const isNewUser = !localStorage.getItem(email);
+      //       window.location.href = isNewUser ? "userdata.html" : "index.html";
+      //     } else {
+      //       alert("Google token verification failed.");
+      //     }
+      //   } catch (err) {
+      //     console.error("Auth error:", err);
+      //     alert("Login failed due to a server error.");
+      //   }
+      // }
 
-      function func() {
-        console.log("Button clicked!");
-      }
+      // async function fetchGoogleClientId() {
+      //   console.log("Fetching Google Client ID...");
+      //   try {
+      //     const res = await fetch("/api/auth/get-client-id");
+      //     const data = await res.json();
+
+      //     if (data.success) {
+      //       google.accounts.id.initialize({
+      //         client_id: data.clientId,
+      //         callback: handleCredentialResponse
+      //       });
+      //       google.accounts.id.renderButton(
+      //         document.getElementById("googleSignInButton"),
+      //         { theme: "outline", size: "large" }
+      //       );
+      //     } else {
+      //       console.error("Failed to fetch Google Client ID.");
+      //     }
+      //   }
+      //   catch (err) {
+      //     console.error("Error fetching Google Client ID:", err);
+      //   }
+      // }
+
+      // window.onload = fetchGoogleClientId;
+      // fetchGoogleClientId();
+
