@@ -6,7 +6,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 router.post('/google', async (req, res) => {
   const { credential } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
 
   try {
     const ticket = await client.verifyIdToken({
@@ -28,6 +28,10 @@ router.post('/google', async (req, res) => {
     console.error('Verification failed:', err);
     res.status(401).json({ success: false, message: 'Token verification failed' });
   }
+});
+
+router.get('/get-client-id', (req, res) => {
+  res.json({ success: true, clientId: process.env.GOOGLE_CLIENT_ID });
 });
 
 export default router;

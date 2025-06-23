@@ -1,43 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nutrition Tracker - Sign In</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  
-
-  <!-- Load Google Sign-In JavaScript library -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-  <style>
-
-  </style>
+  <title>Google Sign-In</title>
 </head>
 <body>
-
-  <h1>Welcome to Nutrition Tracker</h1>
-  <p>Sign in with your Google account to continue</p>
-
-  <!-- Google Sign-In Setup -->
-  <div id="g_id_onload"
-       data-client_id=""
-       data-callback="handleCredentialResponse"
-       data-auto_prompt="false">
-  </div>
-
-  <!-- Google Sign-In Button -->
-  <div class="g_id_signin"
-       data-type="standard"
-       data-size="large"
-       data-theme="outline"
-       data-text="signin_with"
-       data-shape="rectangular"
-       data-logo_alignment="left">
-  </div>
-
-  <script src="/js/script.js">
-    
-  </script>
+  <div id="googleSignInContainer"></div>
+  <!-- Load your client-side JS file -->
+<script src="/client-js/google_signin.js" thype="module"></script>
+ 
 </body>
 </html>
+
+<!-- 1. design, 2. localstorage -->
