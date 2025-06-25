@@ -1,7 +1,7 @@
 import express from 'express'; 
+import { db } from '../models/db.js';
 
-const router = express.Router();
-// import db from '../db.js';   
+const router = express.Router(); 
 
 router.post('/user-target', async (req, res) => {
     // const { water_intake, body_weight, calorie_intake, calorie_burn } = req.body;
@@ -28,14 +28,17 @@ router.post('/user-target', async (req, res) => {
     }
 });
 
-router.post('/user-fitness-data', async (req, res) => {
-  const { name, email, height, weight, age } = req.body;
-  const query = `INSERT INTO userdata (name, email, height, weight, age) VALUES (?, ?, ?, ?, ?)`;
+router.post('/user-target-data', async (req, res) => {
+    console.log('Received user fitness data:', req.body);
+  const { name, email, height, weight, age, target_water_intake, target_body_weight, target_cal_intake, target_cal_burn } = req.body;
+  const query = `INSERT INTO userdata (user_name, user_email, height, weight, age, target_water_intake, target_body_weight, target_cal_intake, target_cal_burn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   try {
-    console.log('Received user data:', { name, email, height, weight, age });
-    // await db.execute(query, [name, email, height, weight, age]);
-    res.status(201).json({ success: true, message: 'User data saved' });
+    console.log('Received user data:', { name, email, height, weight, age, target_water_intake, target_body_weight, target_cal_intake, target_cal_burn });
+    const [result] = await db.execute(query, [name, email, height, weight, age, target_water_intake, target_body_weight, target_cal_intake, target_cal_burn]);
+    // const id = result.insertId;
+    console.log(result);
+    res.status(201).json({ success: true, message: 'User data saved', id: result.insertId});
   } 
   catch (err) {
     console.error('DB insert error:', err);
@@ -46,26 +49,28 @@ router.post('/user-fitness-data', async (req, res) => {
 router.get('/user-index/:email', async (req, res) => {
     try {
         const email_ID = req.params.email;
-        // const [rows] = await db.execute('SELECT * FROM userdata WHERE email = ?', [email_ID]);
+        const [rows] = await db.execute('SELECT * FROM userdata WHERE user_email = ?', [email_ID]);
 
-        // if (rows.length === 0) {
-        //     return res.status(404).json( {success: false, message: 'User not found!'} );
-        // }
+        if (rows.length === 0) {
+            return res.status(404).json( {success: false, message: 'User not found!'} );
+        }
 
-        // const name = rows[0].name;
-        // const email = rows[0].email;
-        // const height = rows[0].height;
-        // const weight = rows[0].weight;
-        // const age = rows[0].age;
+        // console.log('User data fetched successfully:', rows[0]);
 
-        // const userData = {name, email, height, weight, age};
-        const userData = {
-            name: 'John Doe',
-            email: email_ID,
-            height: 180,
-            weight: 75,
-            age: 30
-        };
+        const name = rows[0].user_name;
+        const email = rows[0].user_email;
+        const height = rows[0].height;
+        const weight = rows[0].weight;
+        const age = rows[0].age;
+
+        const userData = {name, email, height, weight, age};
+        // const userData = {
+        //     name: 'John Doe',
+        //     email: email_ID,
+        //     height: 180,
+        //     weight: 75,
+        //     age: 30
+        // };
 
         res.status(200).json({success: true, message: 'User data found!', data: userData});
     }
