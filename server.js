@@ -6,7 +6,7 @@ import progresssRoutes from './routes/progress.js';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import db from './models/db.js';
+import { checkConnection, db } from './models/db.js';
 
 dotenv.config();
 const app = express();
@@ -56,7 +56,22 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
+app.get('/userdata-db', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM userdata');
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error('Database query failed:', err);
+    res.status(500).json({ success: false, error: 'DB query error' });
+  }
+});
+
 // 🚀 Start server
-app.listen(PORT, () => {
+app.listen(PORT, async() => {
   console.log(`Server running at ${HOSTNAME}:${PORT}`);
+  try {
+    await checkConnection();
+  } catch (err) {
+    console.error('Failed to connect to the database:', err);
+  }
 });
