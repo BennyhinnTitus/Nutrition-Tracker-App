@@ -57,22 +57,24 @@ router.get('/user-index/:email', async (req, res) => {
 
         // console.log('User data fetched successfully:', rows[0]);
 
-        const name = rows[0].user_name;
-        const email = rows[0].user_email;
+        const user_name = rows[0].user_name;
+        const user_email = rows[0].user_email;
         const height = rows[0].height;
         const weight = rows[0].weight;
         const age = rows[0].age;
 
-        const userData = {name, email, height, weight, age};
-        // const userData = {
-        //     name: 'John Doe',
-        //     email: email_ID,
-        //     height: 180,
-        //     weight: 75,
-        //     age: 30
-        // };
+        const target_water_intake = rows[0].target_water_intake;
+        const target_body_weight = rows[0].target_body_weight;
+        const target_cal_intake = rows[0].target_cal_intake;
+        const target_cal_burn = rows[0].target_cal_burn;
 
-        res.status(200).json({success: true, message: 'User data found!', data: userData});
+        const userData = {user_name, user_email, height, weight, age};
+        const targetData = {target_water_intake, target_body_weight, target_cal_intake, target_cal_burn};
+
+        // console.log(userData);
+        // console.log(targetData);
+
+        res.status(200).json({success: true, message: 'User data found!', user: userData, target: targetData});
     }
     catch (err) {
         console.error('Something went wrong!', err);

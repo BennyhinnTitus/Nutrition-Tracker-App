@@ -29,6 +29,8 @@ router.post('/daily-progress/:email', async (req, res) => {
 
         console.log('🚀 Rows from historydata:', rows_2);
 
+        let daily = {};
+
         if (rows_2.length !== 0) {
             const query_3 = 'UPDATE historydata SET water = ?, cal_intake = ?, cal_burn = ?, weight = ? WHERE userdata_id = ? AND log_date = ?';
 
@@ -47,6 +49,8 @@ router.post('/daily-progress/:email', async (req, res) => {
             console.log('🚀 Updated data:', { water, cal_intake, cal_burn, weight });
 
             await db.query(query_3, [water, cal_intake, cal_burn, weight, user_id, current_date]);
+
+            daily = {water, cal_intake, cal_burn};
         }
         else {
             const query_4 = 'INSERT INTO historydata (userdata_id, water, cal_intake, cal_burn, weight, log_date) VALUES (?, ?, ?, ?, ?, ?)';
@@ -55,10 +59,29 @@ router.post('/daily-progress/:email', async (req, res) => {
             const cal_burn =  Number(req.body.burn);
             const weight =  Number(req.body.weight);
 
-            await db.query(query_4, [user_id, water, cal_intake, cal_burn, weight, current_date]);  
+            await db.query(query_4, [user_id, water, cal_intake, cal_burn, weight, current_date]);
+            
+            daily = {water, cal_intake, cal_burn};
         }
+        // console.log('🚀 Daily Progress:', daily);
+
+        let targetData = {};
+        const query_5 = 'SELECT target_water_intake, target_cal_intake, target_cal_burn FROM userdata WHERE user_email = ?';
+        const [rows_5] = await db.query(query_5, [email]);
+
+        const target_water_intake = rows_5[0].target_water_intake;
+        const target_cal_intake = rows_5[0].target_cal_intake;
+        const target_cal_burn = rows_5[0].target_cal_burn;
+
+        targetData = {
+            target_water_intake,
+            target_cal_intake,
+            target_cal_burn
+        };
+
+        console.log('🚀 Target Data:', targetData);
         
-        res.status(200).json({ success: true, message: 'Daily progress recorded successfully!'});
+        res.status(200).json({ success: true, message: 'Daily progress recorded successfully!', dailyData: daily, target: targetData});
     }
     catch (err) {
         console.error('Error in daily progress route:', err);

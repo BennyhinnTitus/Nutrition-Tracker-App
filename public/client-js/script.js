@@ -43,6 +43,10 @@
 //   });
 
 
+
+
+
+
  const userBox = document.getElementById("userDetailsBox");
     const email = localStorage.getItem("userEmail");
     
@@ -63,10 +67,10 @@
     const result = await res.json();
    
       if (result.success) {
-        const userData = result.data;
+        const userData = result.user;
         userBox.innerHTML = `
-        <p><strong>Name:</strong> ${userData.name}</p>
-        <p><strong>Email:</strong> ${userData.email}</p>
+        <p><strong>Name:</strong> ${userData.user_name}</p>
+        <p><strong>Email:</strong> ${userData.user_email}</p>
         <p><strong>Weight:</strong> ${userData.weight} kg</p>
         <p><strong>Height:</strong> ${userData.height} cm</p>
         <p><strong>Age:</strong> ${userData.age}</p>
@@ -75,6 +79,7 @@
       else {
         userBox.innerHTML = "User data not found!";
       }
+      
     }
     
     catch (err) {
@@ -83,52 +88,30 @@
     }
   }
   fetchUserData();
-  
-//   END OF USERDATA
 
-    let daily = JSON.parse(localStorage.getItem("dailyProgress")) || {
-      water: 0,
-      weight: 75,
-      cal_intake: 0,
-      cal_burn: 0,
-    };
 
-    const target = {
-        water: 4000,
-        weight: 68,
-        cal_intake: 2000,
-        cal_burn: 500
-    };
 
-    const showProgessBox = document.getElementById("showProgressBox");
-    showProgessBox.innerHTML = `
-    <h4>1. Water Goal (${daily.water} / ${target.water})</h4>
-    <p>Achieved ${Math.round((daily.water / target.water) * 100)}%</p>
-    <h4>2. Calorie Burns (${daily.cal_burn} / ${target.cal_burn})</h4>
-    <p>Achieved ${Math.round((daily.cal_burn / target.cal_burn) * 100)}%</p>
-    <h4>3. Calorie Intakes (${daily.cal_intake} / ${target.cal_intake})</h4>
-    <p>Reached ${Math.round((daily.cal_intake / target.cal_intake) * 100)}%</p>
-    `;
+
+
+const showProgessBox = document.getElementById("showProgressBox");
+showProgessBox.innerText = 'Update Your Stats To See Progress!';
+
+
+
+
 
 document.getElementById('dailyStatForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    console.log('🚀 Submitted Form Data:');
+
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-
-    console.log('🚀 Submitted Form Data:');
 
     if (!data.water.trim() && !data.intake.trim() && !data.burn.trim() && !data.weight.trim()) {
       alert('You did nothing...');
       return;
     }
-
-    daily.water += Number(data.water);
-    daily.weight = Number(data.weight); 
-    daily.cal_intake += Number(data.intake);
-    daily.cal_burn += Number(data.burn);
-
-    localStorage.setItem("dailyProgress", JSON.stringify(daily));
 
     try {
       const email = localStorage.getItem("userEmail");
@@ -152,21 +135,17 @@ document.getElementById('dailyStatForm').addEventListener('submit', async (e) =>
       console.log('🚀 Response from server:', result.message);
 
       if (result.success) {
-          const target = {
-            water: 4000,
-            weight: 68,
-            cal_intake: 2000,
-            cal_burn: 500
-      };
+        const daily = result.dailyData;
+        const targetData = result.target;
 
         const showProgessBox = document.getElementById("showProgressBox");
         showProgessBox.innerHTML = `
-        <h4>1. Water Goal (${daily.water} / ${target.water})</h4>
-        <p>Achieved ${Math.round((daily.water / target.water) * 100)}%</p>
-        <h4>2. Calorie Burns (${daily.cal_burn} / ${target.cal_burn})</h4>
-        <p>Achieved ${Math.round((daily.cal_burn / target.cal_burn) * 100)}%</p>
-        <h4>3. Calorie Intakes (${daily.cal_intake} / ${target.cal_intake})</h4>
-        <p>Reached ${Math.round((daily.cal_intake / target.cal_intake) * 100)}%</p>
+        <h4>1. Water Goal (${daily.water} / ${targetData.target_water_intake})</h4>
+        <p>Achieved ${Math.round((daily.water / targetData.target_water_intake) * 100)}%</p>
+        <h4>2. Calorie Burns (${daily.cal_burn} / ${targetData.target_cal_burn})</h4>
+        <p>Achieved ${Math.round((daily.cal_burn / targetData.target_cal_burn) * 100)}%</p>
+        <h4>3. Calorie Intakes (${daily.cal_intake} / ${targetData.target_cal_intake})</h4>
+        <p>Reached ${Math.round((daily.cal_intake / targetData.target_cal_intake) * 100)}%</p>
         `;
 
         alert('Your progress has been successfully submitted!');
@@ -182,3 +161,5 @@ document.getElementById('dailyStatForm').addEventListener('submit', async (e) =>
       return;
     }
 });
+
+
