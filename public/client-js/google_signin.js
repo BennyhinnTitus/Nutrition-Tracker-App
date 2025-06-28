@@ -75,13 +75,21 @@ async function handleCredentialResponse(response) {
   try {
     const verification = await verifyToken(response.credential);
     console.log('Verification result:', verification);
+    
     if (verification.success && verification.user?.email) {
       const email = verification.user.email;
+      alert('welcome ' + email);
       localStorage.setItem('userEmail', email); // ✅ Save to localStorage
       console.log('User logged in:', email);
 
-      // Optional: redirect or update UI
-      window.location.href = "/"; // or "userdata.html", based on your logic
+      // 👉 Redirect based on new_user
+      if (verification.new_user) {
+        window.location.href = "/userdata";
+      } else {
+        localStorage.setItem('userId', verification.userId); // Save userId if available
+        window.location.href = "/";
+      }
+
     } else {
       throw new Error('User info missing or verification failed');
     }
@@ -96,7 +104,7 @@ async function handleCredentialResponse(response) {
 async function verifyToken(credential) {
   const response = await fetch(AUTH_ENDPOINTS.verify, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/client-json' },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ credential })
   });
   if (!response.ok) throw new Error('Verification failed');

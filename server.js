@@ -29,22 +29,22 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/progress', progresssRoutes);
 
-// 🏠 Serve index.html on "/"
+// 🏠 Routes for pages
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-app.get('/signup-login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'signup-login.html'));
-});
-
-app.get('/targetdata', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'targetdata.html')); 
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'signup.html'));
 });
 
 app.get('/userdata', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'userdata.html'));
 });
+
+// app.get('/userdata', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'views', 'userdata.html'));
+// });
 
 app.get('/test-db', async (req, res) => {
   try {
