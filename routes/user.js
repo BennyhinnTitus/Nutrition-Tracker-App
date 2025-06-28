@@ -4,21 +4,21 @@ import { db } from '../models/db.js';
 const router = express.Router(); 
 
 router.post('/user-target', async (req, res) => {
-    // const { water_intake, body_weight, calorie_intake, calorie_burn } = req.body;
-    // console.log(req.body);
-    // const [rows] = await db.execute('SELECT id FROM userdata WHERE email = ?', [email]);
+    const { water_intake, body_weight, calorie_intake, calorie_burn } = req.body;
+    console.log(req.body);
+    const [rows] = await db.execute('SELECT id FROM userdata WHERE email = ?', [email]);
     
-    // if (rows.length === 0) {
-    //     return res.status(404).json( {success: false, message: 'User not found!'} );
-    // }
+    if (rows.length === 0) {
+        return res.status(404).json( {success: false, message: 'User not found!'} );
+    }
 
-    // const user_id = rows[0].id;
-    // const query = 'INSERT INTO targetdata (userdata_id, water, weight, cal_intake, cal_burn) VALUES (?, ?, ?, ?, ?)';
+    const user_id = rows[0].id;
+    const query = 'INSERT INTO targetdata (userdata_id, water, weight, cal_intake, cal_burn) VALUES (?, ?, ?, ?, ?)';
 
     try {
-        // console.log('🚀 Target Data Received:', req.body);
-        // console.log('Received user target data:', { water_intake, body_weight, calorie_intake, calorie_burn });
-        // await db.execute(query, [user_id, water_intake, body_intake, calorie_intake, calorie_burn]);
+        console.log('🚀 Target Data Received:', req.body);
+        console.log('Received user target data:', { water_intake, body_weight, calorie_intake, calorie_burn });
+        await db.execute(query, [user_id, water_intake, body_intake, calorie_intake, calorie_burn]);
         res.status(201).json( {success: true, message: 'User data saved!', received_data: req.body} );
     }
 
@@ -79,6 +79,18 @@ router.get('/user-index/:email', async (req, res) => {
     catch (err) {
         console.error('Something went wrong!', err);
         res.status(500).json( {success: false, message: 'Cant find userdata and send'} );
+    }
+});
+
+// Check if user exists
+router.get('/check-user/:email', async (req, res) => {
+    try {
+        const { email } = req.params;
+        const [rows] = await db.query('SELECT id FROM userdata WHERE user_email = ?', [email]);
+        res.json({ exists: rows.length > 0 });
+    } catch (error) {
+        console.error('Error checking user:', error);
+        res.status(500).json({ error: 'Failed to check user' });
     }
 });
 
