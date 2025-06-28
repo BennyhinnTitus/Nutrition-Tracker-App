@@ -1,46 +1,50 @@
-// document.getElementById('User-TargetForm').addEventListener('submit', async (e) => {
-//     e.preventDefault(); 
+const userTargetForm = document.getElementById('User-TargetForm');
+if (userTargetForm) {
+    userTargetForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); 
 
-//     console.log('User-Target Data Submitted');
+        console.log('User-Target Data Submitted');
 
-//     const formData = new FormData(e.target);
-//     const data = Object.fromEntries(formData.entries());
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
 
-//     for (const [key, value] of Object.entries(data)) {
-//       console.log(`${key}: ${value}`); 
-//       if (!value.trim()) {
-//         alert(`Please fill in the ${key} field.`);
-//         return;
-//       }
-//     }
+    for (const [key, value] of Object.entries(data)) {
+      console.log(`${key}: ${value}`); 
+      if (!value.trim()) {
+        alert(`Please fill in the ${key} field.`);
+        return;
+      }
+    }
 
-//     try {
-//       const res = await fetch('/api/user/user-target-data', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({
-//             name: data.name,
-//             email: data.email,
-//             height: data.height,
-//             weight: data.weight,
-//             age: data.age,
-//             target_water_intake: data.target_water_intake,
-//             target_body_weight: data.target_body_weight,
-//             target_cal_intake: data.target_cal_intake,
-//             target_cal_burn: data.target_cal_burn,
-//         })
-//       });
+    try {
+      const res = await fetch('/api/user/user-target-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            height: data.height,
+            weight: data.weight,
+            age: data.age,
+            target_water_intake: data.target_water_intake,
+            target_body_weight: data.target_body_weight,
+            target_cal_intake: data.target_cal_intake,
+            target_cal_burn: data.target_cal_burn,
+        })
+      });
       
-//       const result = await res.json();
-//       const id = result.id;
-//       localStorage.setItem("userId", id);
-//       console.log(result.message);
-//     }
-//     catch (error) {
-//       console.error('Error submitting user data:', error);
-//       alert('Something went wrong. Please try again.');
-//     }
-//   });
+      const result = await res.json();
+      const id = result.id;
+      localStorage.setItem("userId", id);
+      console.log(result.message);
+      window.location.href = '/';
+    }
+    catch (error) {
+      console.error('Error submitting user data:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  });
+}
 
 
 
@@ -95,10 +99,6 @@
 
 const showProgessBox = document.getElementById("showProgressBox");
 showProgessBox.innerText = 'Update Your Stats To See Progress!';
-
-
-
-
 
 document.getElementById('dailyStatForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -163,3 +163,88 @@ document.getElementById('dailyStatForm').addEventListener('submit', async (e) =>
 });
 
 
+
+
+
+async function fetchHistoryData() {
+    const id = localStorage.getItem("userId");
+    console.log('🚀 ID from localStorage:', id);
+ if (id) {    
+  try {
+      const res = await fetch(`/api/progress/history/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await res.json();
+      console.log('🚀 Response from server:', result.message);
+
+      if (result.success) {
+        const rows = result.data;
+        console.log('🚀 History Data:', rows);
+
+        const showHistoryBox = document.getElementById("showHistoryBox");
+        // showHistoryBox.innerHTML = 'Your History';
+
+      // Create table
+      const table = document.createElement("table");
+      table.border = "1";
+      table.style.borderCollapse = "collapse";
+      table.style.marginTop = "10px";
+      table.style.width = "100%";
+
+      // Header
+      const headerRow = document.createElement("tr");
+      Object.keys(rows[0]).forEach(col => {
+        const th = document.createElement("th");
+        th.textContent = col.replace(/_/g, " ").toUpperCase();
+        th.style.padding = "8px";
+        headerRow.appendChild(th);
+      });
+      table.appendChild(headerRow);
+
+      // Rows
+      rows.forEach(entry => {
+        const row = document.createElement("tr");
+        Object.values(entry).forEach(val => {
+          const td = document.createElement("td");
+          // if (typeof val === "string" && val.includes("T")) {
+          //   td.textContent = new Date(val).toISOString().split("T")[0];
+          // } else {
+          //   td.textContent = val;
+          // }
+          td.textContent = val;
+          td.style.padding = "6px";
+          td.style.textAlign = "center";
+          row.appendChild(td);
+        });
+        table.appendChild(row);
+      });
+
+      // Append table
+      showHistoryBox.appendChild(table);
+
+      } else {
+        const showHistoryBox = document.getElementById("showHistoryBox");
+        showHistoryBox.innerHTML = 'Make Your First Entry To See History!';
+      }
+    } catch (err) {
+      console.error('Error fetching history data:', err);
+      alert('Failed to fetch history data. Please try again later.');
+    }}
+    else {
+
+    }
+  }
+
+document.addEventListener('DOMContentLoaded', fetchHistoryData);
+
+
+
+document.getElementById('logoutButton').addEventListener('click', () => {
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userId');
+    window.location.href = '/signup';
+});

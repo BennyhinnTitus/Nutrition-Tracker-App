@@ -18,7 +18,7 @@ router.post('/daily-progress/:email', async (req, res) => {
         }
 
         const user_id = rows_1[0].id;
-        // console.log('🚀 User ID:', userId);
+        console.log('🚀 User ID:', user_id);
 
         const today = new Date();
         const current_date = today.toISOString().split('T')[0];
@@ -86,6 +86,34 @@ router.post('/daily-progress/:email', async (req, res) => {
     catch (err) {
         console.error('Error in daily progress route:', err);
         res.status(500).json({ success: false, message: 'Failed to record daily progress.' });
+    }
+});
+
+router.get('/history/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        // console.log('🚀 ID from request params:', id);
+
+        const query = 'SELECT water, cal_intake, cal_burn, weight, log_date FROM historydata WHERE userdata_id = ? ORDER BY log_date ASC';
+        const [rows] = await db.query(query, [id]);
+
+        // console.log('🚀 Rows from historydata:', rows);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'No history found for this user.' });
+        }
+
+        // const formatted = rows.map(row => ({
+        //     ...row,
+        //     log_date: row.log_date.toISOString().split('T')[0]
+        // }));
+
+        res.status(200).json({ success: true, message: 'History fetched successfully!', data: rows });
+    }
+
+    catch (err) {
+        console.error('Error in history route:', err);
+        res.status(500).json({ success: false, message: 'Failed to fetch history.' });
     }
 });
 
