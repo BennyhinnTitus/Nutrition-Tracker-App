@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Dashboard | Nutrition Progress</title>
+  <title>Nutrition Progress</title>
   <link rel="stylesheet" href="/css/style.css" />
-  <style>
-    
-  </style>
 </head>
 <body>
   <h1>Nutrition Tracker</h1>
+  <nav>
+    <button id="logoutButton">Logout</button>
+  </nav>
   <h2><strong>User Details</strong></h2>
-  <div class="user" id="userDetailsBox"></div>
+  <div class="box" id="userDetailsBox"></div>
 
   <h2><strong>Update My Stats</strong></h2>
-  <div class="user" id="updateProgressBox">
+  <div class="box" id="updateProgressBox">
 
     <form id="dailyStatForm">
 
@@ -37,10 +37,16 @@
   </div>
 
   <h2><strong>Today's Progress</strong></h2>
-  <div class="user" id="showProgressBox"></div>
+  <div class="box" id="showProgressBox"></div>
 
-  <script src="/client-js/script.js" defer>
+  <h2><strong>Entire History</strong></h2>
+  <div class="box" id="showHistoryBox"></div>
 
-  </script>
+  <div class="loader">
+    <p>loading...</p>
+  </div>
+
+  <script src="/client-js/auth_check.js"></script>
+  <script src="/client-js/script.js" defer></script>
 </body>
 </html>
