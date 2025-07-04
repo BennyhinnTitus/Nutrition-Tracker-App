@@ -51,8 +51,9 @@ if (userTargetForm) {
 
 
 
- const userBox = document.getElementById("userDetailsBox");
+ const userBox = document.getElementById("user-icon-id");
     const email = localStorage.getItem("userEmail");
+    let isUserDataVisible = false;
     
     async function fetchUserData() {
       if (!email) {
@@ -72,13 +73,31 @@ if (userTargetForm) {
    
       if (result.success) {
         const userData = result.user;
+      if (!isUserDataVisible) {
+        // Show user info
         userBox.innerHTML = `
-        <p><strong>Name:</strong> ${userData.user_name}</p>
-        <p><strong>Email:</strong> ${userData.user_email}</p>
-        <p><strong>Weight:</strong> ${userData.weight} kg</p>
-        <p><strong>Height:</strong> ${userData.height} cm</p>
-        <p><strong>Age:</strong> ${userData.age}</p>
-      `;
+
+          <div id="user-data">
+            <button id="user-icon-button" onclick="fetchUserData()">
+              <i class="fa-solid fa-user fa-xl" style="color: #ffffff;"></i>
+            </button>
+            <p><span>Name   :</span> ${userData.user_name}</p>
+            <p><span>Email  :</span> ${userData.user_email}</p>
+            <p><span>Weight :</span> ${userData.weight} kg</p>
+            <p><span>Height :</span> ${userData.height} cm</p>
+            <p><span>Age    :</span> ${userData.age}</p>
+          </div>
+        `;
+        isUserDataVisible = true;
+      } else {
+        // Hide user info (show only icon)
+        userBox.innerHTML = `
+          <button id="user-icon-button" onclick="fetchUserData()">
+            <i class="fa-solid fa-user fa-xl" style="color: #ffffff;"></i>
+          </button>
+        `;
+        isUserDataVisible = false;
+      }
       }
       else {
         userBox.innerHTML = "User data not found!";
@@ -91,14 +110,14 @@ if (userTargetForm) {
       userBox.innerHTML = "Error fetching user data!";
     }
   }
-  fetchUserData();
+  
 
 
 
 
 
 const showProgessBox = document.getElementById("showProgressBox");
-showProgessBox.innerText = 'Update Your Stats To See Progress!';
+// showProgessBox.innerText = 'Update Your Stats To See Progress!';
 
 document.getElementById('dailyStatForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -140,12 +159,20 @@ document.getElementById('dailyStatForm').addEventListener('submit', async (e) =>
 
         const showProgessBox = document.getElementById("showProgressBox");
         showProgessBox.innerHTML = `
-        <h4>1. Water Goal (${daily.water} / ${targetData.target_water_intake})</h4>
-        <p>Achieved ${Math.round((daily.water / targetData.target_water_intake) * 100)}%</p>
-        <h4>2. Calorie Burns (${daily.cal_burn} / ${targetData.target_cal_burn})</h4>
-        <p>Achieved ${Math.round((daily.cal_burn / targetData.target_cal_burn) * 100)}%</p>
-        <h4>3. Calorie Intakes (${daily.cal_intake} / ${targetData.target_cal_intake})</h4>
-        <p>Reached ${Math.round((daily.cal_intake / targetData.target_cal_intake) * 100)}%</p>
+        <div class="div" id="div_1">
+          <strong>Water Intake</strong>
+          <p><span>${daily.water}</span> of ${targetData.target_water_intake} ml</p>
+        </div>
+
+        <div class="div" id="div_2">
+          <strong>Calorie Burn</strong>
+          <p><span>${daily.cal_burn}</span> of ${targetData.target_cal_burn} cal</p>
+        </div>
+
+        <div class="div" id="div_3">
+          <strong>Calorie Intake</strong>
+          <p><span>${daily.cal_intake}</span> of ${targetData.target_cal_intake} cal</p>
+        </div>
         `;
 
         alert('Your progress has been successfully submitted!');
@@ -238,13 +265,12 @@ async function fetchHistoryData() {
 
     }
   }
-
 document.addEventListener('DOMContentLoaded', fetchHistoryData);
 
 
 
-document.getElementById('logoutButton').addEventListener('click', () => {
+function logout() {   
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userId');
     window.location.href = '/signup';
-});
+}

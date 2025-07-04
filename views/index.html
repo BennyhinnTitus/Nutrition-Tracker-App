@@ -5,14 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nutrition Progress</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://kit.fontawesome.com/d5b4d0c2aa.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <h1>Nutrition Tracker</h1>
-  <nav>
-    <button id="logoutButton">Logout</button>
-  </nav>
-  <h2><strong>User Details</strong></h2>
-  <div class="box" id="userDetailsBox"></div>
+  <h1><strong>Nutrition Tracker</strong></h1>
+
+  <div class="icon1" id="logout-icon-id">
+    <button id="logoutButton" onclick="logout()"><i class="fa-solid fa-right-from-bracket fa-flip-horizontal fa-xl" style="color: #ffffff;"></i></button>
+  </div>
+
+  <div class="icon2" id="user-icon-id">
+    <button id="user-icon-button" onclick="fetchUserData()"><i class="fa-solid fa-user fa-xl" style="color: #ffffff;"></i></button>
+  </div>
+
+  <h2 id="today_h2"><strong>Today's Progress</strong></h2>
+  <div class="todayProgressBox" id="showProgressBox">
+    <div class="div" id="div_1">
+      <strong>Water Intake</strong>
+    </div>
+    <div class="div" id="div_2">
+      <strong>Calorie Burn</strong>
+    </div>
+    <div class="div" id="div_3">
+      <strong>Calorie Intake</strong>
+    </div>
+    <div class="div" id="div_4">
+      <strong>Daily Weight</strong>
+    </div>
+  </div>
+
+  <!-- <h2><strong>User Details</strong></h2>
+  <div class="box" id="userDetailsBox"></div> -->
 
   <h2><strong>Update My Stats</strong></h2>
   <div class="box" id="updateProgressBox">
@@ -36,8 +59,7 @@
 
   </div>
 
-  <h2><strong>Today's Progress</strong></h2>
-  <div class="box" id="showProgressBox"></div>
+
 
   <h2><strong>Entire History</strong></h2>
   <div class="box" id="showHistoryBox"></div>
