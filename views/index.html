@@ -8,61 +8,65 @@
   <script src="https://kit.fontawesome.com/d5b4d0c2aa.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <h1><strong>Nutrition Tracker</strong></h1>
+  <div class="header">
+    <div class="image">
+      <img src="css/assets/logo.jpg" alt="WebAppLogo">
+    </div>
 
-  <div class="icon1" id="logout-icon-id">
-    <button id="logoutButton" onclick="logout()"><i class="fa-solid fa-right-from-bracket fa-flip-horizontal fa-xl" style="color: #ffffff;"></i></button>
-  </div>
+    <div class="mid"><h1><strong>Nutrition Tracker</strong></h1></div>
 
-  <div class="icon2" id="user-icon-id">
-    <button id="user-icon-button" onclick="fetchUserData()"><i class="fa-solid fa-user fa-xl" style="color: #ffffff;"></i></button>
+    <div class="icon2" id="user-icon-id">
+      <button id="user-icon-button" onclick="fetchUserData()"><i class="fa-solid fa-user fa-xl" style="color: #ffffff;"></i></button>
+    </div>
   </div>
+  <br>
+
 
   <h2 id="today_h2"><strong>Today's Progress</strong></h2>
   <div class="todayProgressBox" id="showProgressBox">
     <div class="div" id="div_1">
-      <strong>Water Intake</strong>
     </div>
     <div class="div" id="div_2">
-      <strong>Calorie Burn</strong>
     </div>
     <div class="div" id="div_3">
-      <strong>Calorie Intake</strong>
     </div>
     <div class="div" id="div_4">
-      <strong>Daily Weight</strong>
     </div>
   </div>
+  <br>
 
   <!-- <h2><strong>User Details</strong></h2>
   <div class="box" id="userDetailsBox"></div> -->
+  <div class="daily-History">
 
-  <h2><strong>Update My Stats</strong></h2>
-  <div class="box" id="updateProgressBox">
+      <div class="child1">
+          <h2 class="one"><strong>Update My Stats</strong></h2>
+          <div class="box" id="updateProgressBox">
+            <form id="dailyStatForm">
 
-    <form id="dailyStatForm">
+              <label for="water">Water Took In (ml)</label>
+              <input type="number" name="water" placeholder="e.g., 300" />
 
-      <label for="water">Water Drank (ml)</label>
-      <input type="number" name="water" placeholder="e.g., 300" />
+              <label for="intake">Calorie Took In (cal)</label>
+              <input type="number" name="intake" placeholder="e.g., 600" />
 
-      <label for="intake">Calorie Intaken (cal)</label>
-      <input type="number" name="intake" placeholder="e.g., 600" />
+              <label for="burn">Calorie Burned (cal)</label>
+              <input type="number" name="burn" placeholder="e.g., 400" />
 
-      <label for="burn">Calorie Burned (cal)</label>
-      <input type="number" name="burn" placeholder="e.g., 400" />
+              <label for="weight">Current Weight (kg)</label>
+              <input id="dailyFormLastInput" type="number" name="weight" placeholder="e.g., 70" />
 
-      <label for="weight">Current Weight</label>
-      <input type="number" name="weight" placeholder="e.g., 70" />
+              <button type="submit" id="dailyFormbutton">Update My Progress</button>
+            </form>
+          </div>
+      </div>
 
-      <button type="submit">Save My Progress</button>
-    </form>
+      <div class="child2">
+          <h2 class="one"><strong>Entire History</strong></h2>
+          <div class="historyBox" id="showHistoryBox"></div>
+      </div>
 
   </div>
-
-
-
-  <h2><strong>Entire History</strong></h2>
-  <div class="box" id="showHistoryBox"></div>
 
   <div class="loader">
     <p>loading...</p>

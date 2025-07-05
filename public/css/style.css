@@ -1,5 +1,9 @@
-.icon1, .icon2 {
+.icon2 {
   display: inline;
+}
+.icon2 {
+  border-radius: 10px;
+  z-index: 2;
 }
 #logoutButton {
   border-radius: 25px;
@@ -16,25 +20,31 @@
 h1 {
   text-align: center;
   padding-top: 20px;
-  /* padding-bottom: 5px; */
-  text-shadow: 0px 0px 10px teal, 0px 0px 20px teal, 0px 0px 30px teal, 0px 0px 5px teal;
+  padding-bottom: 5px;
 }
 * {
   font-family: sans-serif;
 }
 #user-data {
   border: 1px solid teal;
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 20px;
+  background-color: rgb(206, 255, 249);
 }
 /* #user-data button {
 
 } */
 #user-data p:hover {
   cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.598);
+
 }
-#user-data p span{
+#user-data p {
   color: darkcyan;
+  
+}
+#user-data span {
+  font-weight: bold;
 }
 body {
   background-color: black;
@@ -51,16 +61,19 @@ body {
   padding-top: 15px;
   box-sizing: border-box;
   width: 20%;
-  height: 150px;
+  height: 170px;
   border-radius: 20px;
   background-color: rgb(206, 255, 249);
   margin: 0px;
   color: teal;
   text-align: left;
   padding-left: 20px;
+  padding-right: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1;
 }
 #today_h2 {
-  text-shadow: 0px 0px 10px teal, 0px 0px 20px teal, 0px 0px 30px teal, 0px 0px 5px teal;
+  
   padding-top: 20px;
   padding-bottom: 30px;
   padding-left: 80px;
@@ -71,6 +84,92 @@ body {
 .div span {
   font-size: 30px;
 }
+.div:hover {
+  transform: translateY(-10px);
+  box-shadow: 8px 8px 8px teal;
+}
+.div .outter {
+  background-color: white;
+  padding: 0px;
+  border-radius: 25px;
+  width: 100%;
+}
+.div .inner {
+  margin: 0px;
+  background-color: darkcyan;
+  border-radius: 25px;
+  width: 0%;
+}
+.div .percentage {
+  text-align: center;
+}
+#updateProgressBox {
+  border-radius: 20px;
+  background-color: rgb(206, 255, 249);
+  color: teal;
+  font-weight: bold;
+  margin-top: 0px;
+}
+#dailyStatForm input {
+  border-radius: 20px;
+}
+#dailyStatForm input:hover {
+  background-color: rgba(255, 255, 255, 0.55);
+}
+#dailyStatForm button {
+  border-radius: 20px;
+}
+.super {
+  display: flex;
+  gap: 10px;
+}
+#close {
+  border-radius: 25px;
+  margin: 0px;
+}
+.icon3 {
+  position: absolute;
+  right: 21px;
+}
+.header .image img {
+  width: 100px;
+  height: 100px;
+}
+.header {
+  display: flex;
+  /* border: 1px solid white;   */
+  flex-direction: row;      
+  align-items: center; 
+}
+.header .mid{
+  margin: auto;
+}
+#user-data {
+  margin-top: 170px;
+}
+#edit_button {
+  margin: 0;
+  border-radius: 25px;
+}
+.daily-History {
+  display: flex;
+  justify-content: space-evenly;
+}
+.child1, .child2 {
+  border: 1px solid white;
+  width: 40%;
+}
+.child1 h2{
+  text-align: center;
+}
+.child2 h2{
+  text-align: center;
+}
+.one {
+  padding-top: 20px;
+  padding-bottom: 30px;
+}
+
 
     .box {
       display: inline-block;
@@ -117,7 +216,7 @@ body {
  }
 
  .loader {
-    display: none; /* Initially hidden */
+    display: none; 
     position: fixed;
     top: 0;
     left: 0;
