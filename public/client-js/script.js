@@ -1,4 +1,5 @@
 const userTargetForm = document.getElementById('User-TargetForm');
+let t_Data = {};
 if (userTargetForm) {
     userTargetForm.addEventListener('submit', async (e) => {
         e.preventDefault(); 
@@ -15,6 +16,15 @@ if (userTargetForm) {
         return;
       }
     }
+
+    t_Data = {
+      target_water_intake: data.target_water_intake,
+      target_body_weight: data.target_body_weight,
+      target_cal_intake: data.target_cal_intake,
+      target_cal_burn: data.target_cal_burn,
+    }
+
+    localStorage.setItem("targetData", JSON.stringify(t_Data));
 
     try {
       const res = await fetch('/api/user/user-target-data', {
@@ -74,13 +84,22 @@ if (userTargetForm) {
       if (result.success) {
         const userData = result.user;
       if (!isUserDataVisible) {
-        // Show user info
         userBox.innerHTML = `
 
           <div id="user-data">
-            <button id="user-icon-button" onclick="fetchUserData()">
-              <i class="fa-solid fa-user fa-xl" style="color: #ffffff;"></i>
-            </button>
+          <div class="super">
+            <div class="icon1" id="logout-icon-id">
+              <button id="logoutButton" onclick="logout()" title="Click to logout"><i class="fa-solid fa-right-from-bracket fa-flip-horizontal fa-xl" style="color: #ffffff;"></i></button>
+            </div>
+
+            <div class="edit">
+              <button id="edit_button" title="Edit your goals" onclick="window.location.href='/editGoals'"><i class="fa-solid fa-pen-to-square fa-xl" style="color: #ffffff;"></i></button>
+            </div>
+
+            <div class="icon3">
+              <button onclick="fetchUserData()" id="close" title="Close"><i class="fa-solid fa-xmark fa-xl" style="color: #ffffff;"></i></button>
+            </div>
+          </div>
             <p><span>Name   :</span> ${userData.user_name}</p>
             <p><span>Email  :</span> ${userData.user_email}</p>
             <p><span>Weight :</span> ${userData.weight} kg</p>
@@ -90,7 +109,6 @@ if (userTargetForm) {
         `;
         isUserDataVisible = true;
       } else {
-        // Hide user info (show only icon)
         userBox.innerHTML = `
           <button id="user-icon-button" onclick="fetchUserData()">
             <i class="fa-solid fa-user fa-xl" style="color: #ffffff;"></i>
@@ -117,9 +135,58 @@ if (userTargetForm) {
 
 
 const showProgessBox = document.getElementById("showProgressBox");
-// showProgessBox.innerText = 'Update Your Stats To See Progress!';
+const targetData = JSON.parse(localStorage.getItem("targetData"));
 
-document.getElementById('dailyStatForm').addEventListener('submit', async (e) => {
+
+showProgessBox.innerHTML =  `
+        <div class="div" id="div_1">
+          <strong>Water Intake</strong>
+          <p><span>0</span> of ${targetData.target_water_intake} ml</p>
+          <div class="outter">
+            <div class="inner" style="color: white">
+            .
+            </div>
+          </div>
+          <p class="percentage">0%</p>
+        </div>
+
+        <div class="div" id="div_2">
+          <strong>Calorie Burn</strong>
+          <p><span>0</span> of ${targetData.target_cal_burn} cal</p>
+          <div class="outter">
+            <div class="inner" style="color: white">
+            .
+            </div>
+          </div>
+          <p class="percentage">0%</p>
+        </div>
+
+        <div class="div" id="div_3">
+          <strong>Calorie Intake</strong>
+          <p><span>0</span> of ${targetData.target_cal_intake} cal</p>
+          <div class="outter">
+            <div class="inner" style="color: white">
+            .
+            </div>
+          </div>
+          <p class="percentage">0%</p>
+        </div>
+
+        <div class="div" id="div_4">
+          <strong>Daily Weight</strong>
+          <p><span>0</span> of ${targetData.target_body_weight} kg</p>
+          <div class="outter">
+            <div class="inner" style="color: white">
+            .
+            </div>
+          </div>
+          <p class="percentage">0%</p>
+        </div>
+        `;
+
+const dailyStat = document.getElementById('dailyStatForm')
+if(dailyStat){
+dailyStat.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     console.log('🚀 Submitted Form Data:');
@@ -155,23 +222,63 @@ document.getElementById('dailyStatForm').addEventListener('submit', async (e) =>
 
       if (result.success) {
         const daily = result.dailyData;
-        const targetData = result.target;
+        // const targetData = result.target;
+        const targetData = JSON.parse(localStorage.getItem("targetData"));
 
         const showProgessBox = document.getElementById("showProgressBox");
+        const water_percent = Math.round((daily.water / targetData.target_water_intake) * 100);
+        const cal_burn_percent = Math.round((daily.cal_burn / targetData.target_cal_burn) * 100);
+        const cal_intake_percent = Math.round((daily.cal_intake / targetData.target_cal_intake) * 100);
+        const weight_percent = Math.round((daily.weight / targetData.target_body_weight) * 100);
+
         showProgessBox.innerHTML = `
         <div class="div" id="div_1">
           <strong>Water Intake</strong>
           <p><span>${daily.water}</span> of ${targetData.target_water_intake} ml</p>
+          
+          <div class="outter">
+            <div class="inner" style="width: ${water_percent}%; color: teal;">
+              .
+            </div>
+          </div>
+          
+          <p class="percentage">${water_percent}%</p>
         </div>
 
         <div class="div" id="div_2">
           <strong>Calorie Burn</strong>
           <p><span>${daily.cal_burn}</span> of ${targetData.target_cal_burn} cal</p>
+          <div class="outter">
+            <div class="inner" style="width: ${cal_burn_percent}%; color: teal;">
+              .
+            </div>
+          </div>
+          
+          <p class="percentage">${cal_burn_percent}%</p>
         </div>
 
         <div class="div" id="div_3">
           <strong>Calorie Intake</strong>
           <p><span>${daily.cal_intake}</span> of ${targetData.target_cal_intake} cal</p>
+          <div class="outter">
+            <div class="inner" style="width: ${cal_intake_percent}%; color: teal;">
+              .
+            </div>
+          </div>
+          
+          <p class="percentage">${cal_intake_percent}%</p>
+        </div>
+
+        <div class="div" id="div_4">
+          <strong>Daily Weight</strong>
+          <p><span>${daily.weight}</span> of ${targetData.target_body_weight} kg</p>
+          <div class="outter">
+            <div class="inner" style="width: ${weight_percent}%; color: teal;">
+              .
+            </div>
+          </div>
+          
+          <p class="percentage">${weight_percent}%</p>
         </div>
         `;
 
@@ -188,6 +295,8 @@ document.getElementById('dailyStatForm').addEventListener('submit', async (e) =>
       return;
     }
 });
+
+}
 
 
 
@@ -261,9 +370,6 @@ async function fetchHistoryData() {
       console.error('Error fetching history data:', err);
       alert('Failed to fetch history data. Please try again later.');
     }}
-    else {
-
-    }
   }
 document.addEventListener('DOMContentLoaded', fetchHistoryData);
 
@@ -274,3 +380,58 @@ function logout() {
     localStorage.removeItem('userId');
     window.location.href = '/signup';
 }
+
+
+
+
+
+const editGoalsForm = document.getElementById('editGoalsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    console.log(toString(data))
+
+    if (!data.target_water_intake || !data.target_body_weight || !data.target_cal_intake || !data.target_cal_burn) {
+      alert('Please fill-in all the fields');
+      return;
+    }
+
+    try {
+      console.log("Executing try block");  
+      const id = JSON.parse(localStorage.getItem("userId"));
+      const res = await fetch('/api/user/edit-target-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: id,
+          target_water_intake: data.target_water_intake,
+          target_body_weight: data.target_body_weight,
+          target_cal_intake: data.target_cal_intake,
+          target_cal_burn: data.target_cal_burn
+        })
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        console.log("Response success");  
+        const newTargetData = {
+          target_water_intake: data.target_water_intake,
+          target_body_weight: data.target_body_weight,
+          target_cal_intake: data.target_cal_intake,
+          target_cal_burn: data.target_cal_burn
+        };
+        localStorage.setItem("targetData", JSON.stringify(newTargetData));
+
+      }
+      else {
+        console.log("Failed: ", result.message);
+      }
+    }
+
+    catch (err) {
+      console.error("Error in 'editGoalsForm' client JS: ", err);
+      alert("Failed to submit the new goals!");
+      return
+    }
+});
