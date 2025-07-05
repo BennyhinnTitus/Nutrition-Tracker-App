@@ -44,13 +44,13 @@ router.post('/daily-progress/:email', async (req, res) => {
             const water = past_water + Number(req.body.water);
             const cal_intake = past_cal_intake +  Number(req.body.intake);
             const cal_burn = past_cal_burn +  Number(req.body.burn);
-            const weight = past_weight +  Number(req.body.weight);
+            const weight = Number(req.body.weight);
 
             console.log('🚀 Updated data:', { water, cal_intake, cal_burn, weight });
 
             await db.query(query_3, [water, cal_intake, cal_burn, weight, user_id, current_date]);
 
-            daily = {water, cal_intake, cal_burn};
+            daily = {water, cal_intake, cal_burn, weight};
         }
         else {
             const query_4 = 'INSERT INTO historydata (userdata_id, water, cal_intake, cal_burn, weight, log_date) VALUES (?, ?, ?, ?, ?, ?)';
@@ -61,27 +61,29 @@ router.post('/daily-progress/:email', async (req, res) => {
 
             await db.query(query_4, [user_id, water, cal_intake, cal_burn, weight, current_date]);
             
-            daily = {water, cal_intake, cal_burn};
+            daily = {water, cal_intake, cal_burn, weight};
         }
         // console.log('🚀 Daily Progress:', daily);
 
-        let targetData = {};
-        const query_5 = 'SELECT target_water_intake, target_cal_intake, target_cal_burn FROM userdata WHERE user_email = ?';
-        const [rows_5] = await db.query(query_5, [email]);
+        // let targetData = {};
+        // const query_5 = 'SELECT target_water_intake, target_body_weight, target_cal_intake, target_cal_burn FROM userdata WHERE user_email = ?';
+        // const [rows_5] = await db.query(query_5, [email]);
 
-        const target_water_intake = rows_5[0].target_water_intake;
-        const target_cal_intake = rows_5[0].target_cal_intake;
-        const target_cal_burn = rows_5[0].target_cal_burn;
+        // const target_water_intake = rows_5[0].target_water_intake;
+        // const target_cal_intake = rows_5[0].target_cal_intake;
+        // const target_cal_burn = rows_5[0].target_cal_burn;
+        // const target_body_weight = rows_5[0].target_body_weight;
 
-        targetData = {
-            target_water_intake,
-            target_cal_intake,
-            target_cal_burn
-        };
+        // targetData = {
+        //     target_water_intake,
+        //     target_cal_intake,
+        //     target_cal_burn,
+        //     target_body_weight
+        // };
 
-        console.log('🚀 Target Data:', targetData);
+        // console.log('🚀 Target Data:', targetData);
         
-        res.status(200).json({ success: true, message: 'Daily progress recorded successfully!', dailyData: daily, target: targetData});
+        res.status(200).json({ success: true, message: 'Daily progress recorded successfully!', dailyData: daily});
     }
     catch (err) {
         console.error('Error in daily progress route:', err);
