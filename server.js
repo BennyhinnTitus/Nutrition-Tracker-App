@@ -42,9 +42,9 @@ app.get('/userdata', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'userdata.html'));
 });
 
-// app.get('/userdata', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'views', 'userdata.html'));
-// });
+app.get('/editGoals', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'editGoals.html'));
+});
 
 app.get('/test-db', async (req, res) => {
   try {
