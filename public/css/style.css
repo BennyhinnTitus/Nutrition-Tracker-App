@@ -31,9 +31,6 @@ h1 {
   padding: 20px;
   background-color: rgb(206, 255, 249);
 }
-/* #user-data button {
-
-} */
 #user-data p:hover {
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.598);
@@ -56,6 +53,7 @@ body {
   margin: 0px;
   flex-wrap: wrap;
   row-gap: 45px;
+
 }
 .div {
   padding-top: 15px;
@@ -69,6 +67,7 @@ body {
   text-align: left;
   padding-left: 20px;
   padding-right: 20px;
+
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   z-index: 1;
 }
@@ -154,20 +153,44 @@ body {
 .daily-History {
   display: flex;
   justify-content: space-evenly;
+  margin-top: 30px;
 }
 .child1, .child2 {
-  border: 1px solid white;
   width: 40%;
 }
-.child1 h2{
+/* .child1 h2{
   text-align: center;
-}
+} */
 .child2 h2{
   text-align: center;
 }
 .one {
   padding-top: 20px;
   padding-bottom: 30px;
+}
+#updateProgressBox {
+  margin-left: 80px;
+}
+#showHistoryBox {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+th {
+  background-color: rgb(206, 255, 249);
+  font-weight: bold;
+  color: teal;
+  font-size: large;
+}
+tr:nth-child(odd) {
+  background-color: rgb(206, 255, 249);
+  color: teal;
+}
+tr:nth-child(even) {
+  background-color: white;
+  color: teal;
+}
+#upstat {
+  padding-left: 160px;
 }
 
 

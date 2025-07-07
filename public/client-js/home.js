@@ -264,15 +264,20 @@ async function fetchHistoryData() {
       // Create table
       const table = document.createElement("table");
       table.border = "1";
-      table.style.borderCollapse = "collapse";
-      table.style.marginTop = "10px";
+      table.style.borderCollapse = "separate";
+      table.style.borderSpacing = "0";         // removes default spacing
+      table.style.borderRadius = "20px"; 
+      table.style.overflow = "hidden";         // ✅ clip child overflow
+      // table.style.marginTop = "10px";
       table.style.width = "100%";
 
       // Header
       const headerRow = document.createElement("tr");
       Object.keys(rows[0]).forEach(col => {
         const th = document.createElement("th");
-        th.textContent = col.replace(/_/g, " ").toUpperCase();
+        th.textContent = col
+          .replace(/_/g, " ")                          // Replace underscores with spaces
+          .replace(/\b\w/g, char => char.toUpperCase()); // Capitalize first letter of each word
         th.style.padding = "8px";
         headerRow.appendChild(th);
       });
