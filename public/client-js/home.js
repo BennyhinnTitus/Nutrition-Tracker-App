@@ -1,66 +1,3 @@
-const userTargetForm = document.getElementById('User-TargetForm');
-let t_Data = {};
-if (userTargetForm) {
-    userTargetForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); 
-
-        console.log('User-Target Data Submitted');
-
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-
-    for (const [key, value] of Object.entries(data)) {
-      console.log(`${key}: ${value}`); 
-      if (!value.trim()) {
-        alert(`Please fill in the ${key} field.`);
-        return;
-      }
-    }
-
-    t_Data = {
-      target_water_intake: data.target_water_intake,
-      target_body_weight: data.target_body_weight,
-      target_cal_intake: data.target_cal_intake,
-      target_cal_burn: data.target_cal_burn,
-    }
-
-    localStorage.setItem("targetData", JSON.stringify(t_Data));
-
-    try {
-      const res = await fetch('/api/user/user-target-data', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            name: data.name,
-            email: data.email,
-            height: data.height,
-            weight: data.weight,
-            age: data.age,
-            target_water_intake: data.target_water_intake,
-            target_body_weight: data.target_body_weight,
-            target_cal_intake: data.target_cal_intake,
-            target_cal_burn: data.target_cal_burn,
-        })
-      });
-      
-      const result = await res.json();
-      const id = result.id;
-      localStorage.setItem("userId", id);
-      console.log(result.message);
-      window.location.href = '/';
-    }
-    catch (error) {
-      console.error('Error submitting user data:', error);
-      alert('Something went wrong. Please try again.');
-    }
-  });
-}
-
-
-
-
-
-
  const userBox = document.getElementById("user-icon-id");
     const email = localStorage.getItem("userEmail");
     let isUserDataVisible = false;
@@ -375,6 +312,8 @@ document.addEventListener('DOMContentLoaded', fetchHistoryData);
 
 
 
+
+
 function logout() {   
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userId');
@@ -382,56 +321,3 @@ function logout() {
 }
 
 
-
-
-
-const editGoalsForm = document.getElementById('editGoalsForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-    console.log(toString(data))
-
-    if (!data.target_water_intake || !data.target_body_weight || !data.target_cal_intake || !data.target_cal_burn) {
-      alert('Please fill-in all the fields');
-      return;
-    }
-
-    try {
-      console.log("Executing try block");  
-      const id = JSON.parse(localStorage.getItem("userId"));
-      const res = await fetch('/api/user/edit-target-data', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: id,
-          target_water_intake: data.target_water_intake,
-          target_body_weight: data.target_body_weight,
-          target_cal_intake: data.target_cal_intake,
-          target_cal_burn: data.target_cal_burn
-        })
-      });
-
-      const result = await res.json();
-      if (result.success) {
-        console.log("Response success");  
-        const newTargetData = {
-          target_water_intake: data.target_water_intake,
-          target_body_weight: data.target_body_weight,
-          target_cal_intake: data.target_cal_intake,
-          target_cal_burn: data.target_cal_burn
-        };
-        localStorage.setItem("targetData", JSON.stringify(newTargetData));
-
-      }
-      else {
-        console.log("Failed: ", result.message);
-      }
-    }
-
-    catch (err) {
-      console.error("Error in 'editGoalsForm' client JS: ", err);
-      alert("Failed to submit the new goals!");
-      return
-    }
-});
