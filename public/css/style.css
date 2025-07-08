@@ -181,16 +181,88 @@ th {
   color: teal;
   font-size: large;
 }
-tr:nth-child(odd) {
+/* tr:nth-child(odd) {
   background-color: rgb(206, 255, 249);
   color: teal;
 }
 tr:nth-child(even) {
   background-color: white;
   color: teal;
-}
+} */
+ tr {
+  background-color: white;
+  color: teal;
+ }
+ tr:hover {
+  background-color: rgb(235, 255, 253);
+ }
 #upstat {
   padding-left: 160px;
+}
+#editFormDiv {
+  border-radius: 20px;
+  background-color: rgb(206, 255, 249);
+  color: teal;
+  font-weight: bold;
+  margin-top: 0px;
+}
+#editGoalsForm input {
+  border-radius: 20px;
+}
+#editGoalsForm input:hover {
+  background-color: rgba(255, 255, 255, 0.55);
+}
+#editGoalsForm button {
+  border-radius: 20px;
+}
+.box #goal_h2 {
+  text-align: center;
+  margin-bottom: 60px;
+}
+#editFormMain {
+  transform: translate(100%, 5%);
+  border: none;
+}
+/*  */
+#userTragetDiv {
+  border-radius: 20px;
+  background-color: rgb(206, 255, 249);
+  color: teal;
+  font-weight: bold;
+  margin-top: 0px;
+}
+#userTragetDiv {
+  width: 100%;
+  margin-left: 0px;
+  margin-top: 110px;
+}
+
+#User-TargetForm input {
+  border-radius: 20px;
+}
+#User-TargetForm input:hover {
+  background-color: rgba(255, 255, 255, 0.55);
+}
+#User-TargetForm button {
+  border-radius: 20px;
+}
+.box #bigForm {
+  /* float: right; */
+  margin-bottom: 50px;
+  text-align: right;
+  margin-right: 0px;
+  position: absolute;
+  right: 0px;
+}
+#parent {
+  transform: translate(110%);
+  padding-left: 0px;
+  border: none;
+}
+#loginForm {
+  width: auto;
+  height: 100%;
+  margin: auto;
 }
 
 
